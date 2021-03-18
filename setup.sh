@@ -1,6 +1,7 @@
 #!/bin/bash
 if [ "$#" -ne 1 ]; then
   echo "pass the exercise number. Example : ./setup 1"
+  exit
 fi
 ./init.sh
 
@@ -32,11 +33,11 @@ openssl req -new -keyout localhost.key -out localhost.req -nodes -config localho
 openssl ca -in localhost.req  -cert intermediateca.pem -keyfile intermediateca.key -out localhost.pem -config intermediateca.cnf  -batch -notext
 cat localhost.key >> localhost.pem
 
-#echo "Verify localhost pem file"
-#openssl verify -CAfile rootca1.pem -untrusted intermediateca.pem localhost.pem
+echo "Verify localhost pem file"
+openssl verify -CAfile rootca1.pem -untrusted intermediateca.pem localhost.pem
 
 
-#openssl s_client -connect  dedicated-shard-00-00.vxe9y.mongodb-dev.net:27017  < /dev/null  2>/dev/null  | openssl x509  -text > mongo.cert
+openssl s_client -connect  dedicated-shard-00-00.vxe9y.mongodb-dev.net:27017  < /dev/null  2>/dev/null  | openssl x509  -text > mongo.cert
 
  if [ "$1" -eq "2" ]
  then
