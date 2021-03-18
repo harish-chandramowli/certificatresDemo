@@ -1,0 +1,68 @@
+[ req ]
+default_bits = 4096
+encrypt_key = no
+default_md = sha512
+prompt = no
+utf8 = yes
+distinguished_name = ca_dn
+req_extensions = ca_extentions
+
+[ ca_dn ]
+CN = Intermediate
+OU = CertificateAuthority
+O = Harish
+L = New York City
+ST = New YorK
+C = US
+
+[ ca_extentions ]
+#subjectAltName=@subject_alt_names
+basicConstraints=@basic_constraints
+
+[basic_constraints]
+CA = true
+
+[ ca ]
+default_ca = CA
+keyUsage = digitalSignature, keyCertSign
+extendedKeyUsage = clientAuth, serverAuth
+
+[ CA ]
+dir = .
+certs = $dir
+
+certificate = $dir/intermediateca.pem
+private_key = $dir/intermediateca.key
+new_certs_dir = $dir
+database = $dir/intermediatecaindex
+serial = $dir/intermediatecaserial.txt
+unique_subject = no
+default_days = 825
+default_md = SHA512
+copy_extensions = copy
+default_crl_days= 30
+crlnumber =  $dir/intermediatecacrl 
+
+policy = ca_policy
+
+#x509_extensions = x509_ext
+
+[ ca_policy ]
+countryName             = optional
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = optional
+domainComponent         = optional
+emailAddress            = optional
+name                    = optional
+surname                 = optional
+givenName               = optional
+dnQualifier             = optional
+
+#[ x509_ext ]
+#subjectKeyIdentifier    = hash
+#authorityKeyIdentifier  = keyid:always
+
+
