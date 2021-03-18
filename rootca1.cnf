@@ -35,8 +35,8 @@ extendedKeyUsage = clientAuth, serverAuth
 dir = .
 certs = $dir
 
-certificate = $dir/ca.pem
-private_key = $dir/ca.key
+certificate = $dir/rootca1.pem
+private_key = $dir/rootca1.key
 new_certs_dir = $dir
 database = $dir/index
 serial = $dir/serial.txt

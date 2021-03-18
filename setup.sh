@@ -53,3 +53,32 @@ openssl ca -revoke mongo.cert  -config intermediateCA.cnf
 
 openssl ca -gencrl -out intermediateca.crl  -config intermediateCA.cnf
 openssl crl -in intermediateca.crl  -text -noout
+
+#OCSP
+curl -l https://letsencrypt.org/certs/lets-encrypt-r3.pem > lets-encrypt-r3.pem
+openssl ocsp -issuer lets-encrypt-r3.pem -cert mongo.cert -text -url http://r3.o.lencr.org
+
+echo "Creating cert for Root CA2"
+rm rootca1.key || true
+rm rootca1.req || true
+rm rootca1.pem || true
+
+openssl req -new -keyout rootca2.key -out rootca2.req -nodes -config rootca2.cnf
+openssl ca -out rootca2.pem -keyfile rootca2.key -selfsign -config rootca2.cnf -in rootca2.req  -batch -notext
+cat rootca2.key >> rootca2.pem
+
+ if [ "$1" -eq "3" ]
+ then
+   echo "setup for exercise 3 is complete"
+   exit
+fi
+
+openssl verify -CAfile rootca2.pem -untrusted intermediateca.pem localhost.pem
+
+echo "Sign Intermediate CA using Root CA 2 with same CSR"
+openssl ca -in intermediateca.req -cert rootca2.pem -keyfile rootca2.key -out intermediateca2.pem -config rootca2.cnf -batch -notext
+
+openssl verify -CAfile rootca2.pem -untrusted intermediateca2.pem localhost.pem
+
+
+
